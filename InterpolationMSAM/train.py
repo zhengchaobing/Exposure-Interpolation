@@ -98,10 +98,10 @@ for epoch in range(opt.epoch_count, opt.niter + opt.niter_decay + 1):
         Fake_M = model_restoration(L/255.0, LW2, L2M/255.0, H/255.0, HW2, H2M/255.0 )
 
         # loss_MSE = criterionL1(Fake_M, M/255.0, 1.0) * opt.lamb_MSE
-        # loss_gradient = calculate_cos_loss(Fake_M, M/255.0) * opt.lamb_gradient
-        # loss_feature  = vgg_loss(Fake_M, M/255.0) * opt.lamb_feature
-
-        loss = criterionL1(Fake_M, M/255.0)
+        loss_gradient = calculate_cos_loss(Fake_M, M/255.0) * opt.lamb_gradient
+        loss_feature  = vgg_loss(Fake_M, M/255.0) * opt.lamb_feature
+        loss1 = criterionL1(Fake_M, M/255.0)
+        loss = loss1 + loss_feature + loss_gradient
         print("===> Epoch[{}]({}/{}): Loss: {:.4f} ".format(epoch, idx, len(train_loader), loss.item()))
         optimizer_g.zero_grad()
         loss.backward()
